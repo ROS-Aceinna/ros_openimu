@@ -1,2 +1,2 @@
 from .detector import Detector
-from .imu import IMU
+from .openimu import OpenIMU
