@@ -36,7 +36,7 @@ class OpenIMUros:
         return readback
 
 if __name__ == "__main__":
-    rospy.init_node("openimu_driver")
+    rospy.init_node("openimu_ros")
     openimu_wrp = OpenIMUros()
 
     #imuresult = openimu_wrp.readimu('z1')
