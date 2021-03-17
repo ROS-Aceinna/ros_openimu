@@ -34,17 +34,18 @@ class OpenIMUros:
 
 if __name__ == "__main__":
     rospy.init_node("openimu_driver")
+
     pub_imu = rospy.Publisher('imu_acc_ar', Imu, queue_size=1)
     pub_mag = rospy.Publisher('imu_mag', MagneticField, queue_size=1)
 
-    imu_msg = Imu()             # Raw IMU data
-    mag_msg = MagneticField()       # Magnetometer data
+    imu_msg = Imu()             # IMU data
+    mag_msg = MagneticField()   # Magnetometer data
     
     rate = rospy.Rate(10)   # 10Hz
     seq = 0
     frame_id = 'OpenIMU'
     convert_rads = math.pi *2
-    convert_gauss = 10000
+    convert_tesla = 10000
 
     openimu_wrp = OpenIMUros()
     rospy.loginfo("OpenIMU driver initialized.")
@@ -57,13 +58,13 @@ if __name__ == "__main__":
         imu_msg.header.frame_id = frame_id
         imu_msg.header.seq = seq
         imu_msg.orientation_covariance[0] = -1
-        imu_msg.linear_acceleration.x = float(readback[0])
-        imu_msg.linear_acceleration.y = float(readback[1])
-        imu_msg.linear_acceleration.z = float(readback[2])
+        imu_msg.linear_acceleration.x = readback[1]
+        imu_msg.linear_acceleration.y = readback[2]
+        imu_msg.linear_acceleration.z = readback[3]
         imu_msg.linear_acceleration_covariance[0] = -1
-        imu_msg.angular_velocity.x = float(readback[3]) / convert_rads
-        imu_msg.angular_velocity.y = float(readback[4]) / convert_rads
-        imu_msg.angular_velocity.z = float(readback[5]) / convert_rads
+        imu_msg.angular_velocity.x = readback[4] / convert_rads
+        imu_msg.angular_velocity.y = readback[5] / convert_rads
+        imu_msg.angular_velocity.z = readback[6] / convert_rads
         imu_msg.angular_velocity_covariance[0] = -1
         pub_imu.publish(imu_msg)
 
@@ -71,9 +72,9 @@ if __name__ == "__main__":
         mag_msg.header.stamp = imu_msg.header.stamp
         mag_msg.header.frame_id = frame_id
         mag_msg.header.seq = seq
-        mag_msg.magnetic_field.x = float(readback[6]) / convert_gauss
-        mag_msg.magnetic_field.y = float(readback[7]) / convert_gauss
-        mag_msg.magnetic_field.z = float(readback[8]) / convert_gauss
+        mag_msg.magnetic_field.x = readback[7] / convert_tesla
+        mag_msg.magnetic_field.y = readback[8] / convert_tesla
+        mag_msg.magnetic_field.z = readback[9] / convert_tesla
         mag_msg.magnetic_field_covariance = 0
         pub_mag.publish(mag_msg)
 
