@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import rospy
 import sys
@@ -6,6 +6,7 @@ import math
 from time import time
 from sensor_msgs.msg import Imu, MagneticField
 
+#from ros_openimu.aceinna.tools import OpenIMU   #<<<<< suggested edit
 try:
     from aceinna.tools import OpenIMU
 except:  # pylint: disable=bare-except
@@ -75,7 +76,7 @@ if __name__ == "__main__":
         mag_msg.magnetic_field.x = readback[7] / convert_tesla
         mag_msg.magnetic_field.y = readback[8] / convert_tesla
         mag_msg.magnetic_field.z = readback[9] / convert_tesla
-        mag_msg.magnetic_field_covariance = 0
+        mag_msg.magnetic_field_covariance = [0,0,0,0,0,0,0,0,0]
         pub_mag.publish(mag_msg)
 
         seq = seq + 1
