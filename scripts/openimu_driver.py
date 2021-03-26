@@ -6,12 +6,13 @@ import math
 from time import time
 from sensor_msgs.msg import Imu, MagneticField
 
-#from ros_openimu.aceinna.tools import OpenIMU   #<<<<< suggested edit
 try:
-    from aceinna.tools import OpenIMU
+    from ros_openimu.src.aceinna.tools import OpenIMU
 except:  # pylint: disable=bare-except
-    print('load package from local')
-    sys.path.append('./src')
+    temp = (sys.path[0])
+    temp2 = temp[0:(len(temp)-7)]
+    sys.path.append(temp2 + 'src')
+    #sys.path.append('./src')
     from aceinna.tools import OpenIMU
 
 
