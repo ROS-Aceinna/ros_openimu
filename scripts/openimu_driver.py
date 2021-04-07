@@ -46,8 +46,8 @@ if __name__ == "__main__":
     rate = rospy.Rate(10)   # 10Hz
     seq = 0
     frame_id = 'OpenIMU'
-    convert_rads = math.pi *2
-    convert_tesla = 10000
+    convert_rads = math.pi /180
+    convert_tesla = 1/10000
 
     openimu_wrp = OpenIMUros()
     rospy.loginfo("OpenIMU driver initialized.")
@@ -64,9 +64,9 @@ if __name__ == "__main__":
         imu_msg.linear_acceleration.y = readback[2]
         imu_msg.linear_acceleration.z = readback[3]
         imu_msg.linear_acceleration_covariance[0] = -1
-        imu_msg.angular_velocity.x = readback[4] / convert_rads
-        imu_msg.angular_velocity.y = readback[5] / convert_rads
-        imu_msg.angular_velocity.z = readback[6] / convert_rads
+        imu_msg.angular_velocity.x = readback[4] * convert_rads
+        imu_msg.angular_velocity.y = readback[5] * convert_rads
+        imu_msg.angular_velocity.z = readback[6] * convert_rads
         imu_msg.angular_velocity_covariance[0] = -1
         pub_imu.publish(imu_msg)
 
@@ -74,9 +74,9 @@ if __name__ == "__main__":
         mag_msg.header.stamp = imu_msg.header.stamp
         mag_msg.header.frame_id = frame_id
         mag_msg.header.seq = seq
-        mag_msg.magnetic_field.x = readback[7] / convert_tesla
-        mag_msg.magnetic_field.y = readback[8] / convert_tesla
-        mag_msg.magnetic_field.z = readback[9] / convert_tesla
+        mag_msg.magnetic_field.x = readback[7] * convert_tesla
+        mag_msg.magnetic_field.y = readback[8] * convert_tesla
+        mag_msg.magnetic_field.z = readback[9] * convert_tesla
         mag_msg.magnetic_field_covariance = [0,0,0,0,0,0,0,0,0]
         pub_mag.publish(mag_msg)
 
