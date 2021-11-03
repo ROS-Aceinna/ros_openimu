@@ -31,7 +31,7 @@ class OpenIMUros:
     '''
 
     def readimu(self):
-        readback = self.openimudev.getdata('a1')
+        readback = self.openimudev.getdata('a2')
         return readback
 
 if __name__ == "__main__":

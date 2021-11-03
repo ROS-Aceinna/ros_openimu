@@ -22,3 +22,14 @@ If the sensor is pitched +90
 degrees (front side down), it should read -9.81 meters per second squared for the X axis.
 
 
+### Changes to driver structure
+
+In the default configuaration the driver outputs lists. For better readability and coding style this is changed 
+to dictionaries.<br /> 
+Following format is used: 
+`            imudata = {'time_ms': INITIAL, 'time_s': INITIAL,
+                       'roll': INITIAL, 'pitch': INITIAL, 'heading': INITIAL,
+                       'xrate': INITIAL, 'yrate': INITIAL, 'zrate':INITIAL,
+                       'xaccel': INITIAL, 'yaccel': INITIAL, 'zaccel': INITIAL,
+                       'errorflag'=INITIAL}`
+
