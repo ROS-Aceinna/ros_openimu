@@ -12,7 +12,7 @@ The default axis orientation of the device is not compliant with The ros standar
 Changes are from  X Y Z to X -Y - Z
 
 
-    Acceleration: Be careful with acceleration data. The state estimation nodes in robot_localization assume that an IMU that is placed in its neutral right-side-up position on a flat surface will:
+Acceleration: Be careful with acceleration data.  <br/> The state estimation nodes in robot_localization assume that an IMU that is placed in its neutral right-side-up position on a flat surface will:
 
         > Measure +9.81 meters per second squared for the Z axis.
 If the sensor is rolled +90
