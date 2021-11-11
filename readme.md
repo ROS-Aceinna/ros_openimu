@@ -33,3 +33,8 @@ Following format is used:
                        'xaccel': INITIAL, 'yaccel': INITIAL, 'zaccel': INITIAL,
                        'errorflag'=INITIAL}`
 
+
+
+1. Covariances
+
+The covariances are set for roll and pitch according to the accuray in the datsheet. 0.5

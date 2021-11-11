@@ -40,7 +40,7 @@ class OpenIMU(object):
         self.communicator.close()
 
     def getdata(self, datatype):
-        readback = self.imudevice.read_untils_have_data(datatype)
+        readback = self.imudevice.read_untils_have_data(datatype, 3, 100)
         if datatype == ('z1'):
             timeraw = (readback[0:4])  # time in ms
             time_ms = struct.unpack('I', bytes(timeraw))[0]
@@ -65,6 +65,7 @@ class OpenIMU(object):
             imudata = [time_ms, xaccel, yaccel, zaccel,
                        xrate, yrate, zrate, xmag, ymag, zmag]
 
+            return imudata
 # a1 a2 packets in development
         if datatype == ('a1'):
             time_ms = struct.unpack('I', bytes(readback[0:4]))[0]  # unin32
@@ -88,29 +89,24 @@ class OpenIMU(object):
                        'roll': INITIAL, 'pitch': INITIAL, 'heading': INITIAL,
                        'xrate': INITIAL, 'yrate': INITIAL, 'zrate':INITIAL,
                        'xaccel': INITIAL, 'yaccel': INITIAL, 'zaccel': INITIAL,
-                       'errorflag'=INITIAL}
+                       'errorflag':INITIAL}
             try:
-                time_ms = struct.unpack('I', bytes(readback[0:4]))[0]  # unin32
-                time_s = struct.unpack('d', bytes(readback[4:12]))[0]  # double
-                roll = struct.unpack('f', bytes(readback[12:16]))[0]
-                # Change degrees limit angles from -pi to pi
-                pitch = struct.unpack('f', bytes(readback[16:20]))[0]
-                heading = struct.unpack('f', bytes(readback[20:24]))[0]
-                xrate = struct.unpack('f', bytes(readback[24:28]))[0]
-                yrate = struct.unpack('f', bytes(readback[28:32]))[0]
-                zrate = struct.unpack('f', bytes(readback[32:36]))[0]
-                xaccel = struct.unpack('f', bytes(readback[36:40]))[0]
-                yaccel = struct.unpack('f', bytes(readback[40:44]))[0]
-                zaccel = struct.unpack('f', bytes(readback[44:48]))[0]
-                errorflag = False
-                #zaccel = struct.unpack('f', bytes(readback[48:52]))[0]
-                # Create a dictionairy since lookup is faster and code is cleaner
-
-                imudata = [time_ms, time_s, roll, pitch, heading, xrate,
-                           yrate, zrate, xaccel, yaccel, zaccel, errorflag]
+                imudata['time_ms'] = struct.unpack('I', bytes(readback[0:4]))[0]  # unin32
+                imudata['time_s'] = struct.unpack('d', bytes(readback[4:12]))[0]  # double
+                imudata['roll'] = struct.unpack('f', bytes(readback[12:16]))[0]
+                imudata['pitch'] = struct.unpack('f', bytes(readback[16:20]))[0]
+                imudata['heading'] = struct.unpack('f', bytes(readback[20:24]))[0]
+                imudata['xrate'] = struct.unpack('f', bytes(readback[24:28]))[0]
+                imudata['yrate'] = struct.unpack('f', bytes(readback[28:32]))[0]
+                imudata['zrate'] = struct.unpack('f', bytes(readback[32:36]))[0]
+                imudata['xaccel'] = struct.unpack('f', bytes(readback[36:40]))[0]
+                imudata['yaccel'] = struct.unpack('f', bytes(readback[40:44]))[0]
+                imudata['zaccel'] = struct.unpack('f', bytes(readback[44:48]))[0]
+                imudata['errorflag'] = False
 
             except Exception:
                 errorflag = True
+                imudata['errorflag'] = errorflag
             return imudata
 
 # set values in development
