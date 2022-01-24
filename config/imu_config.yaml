@@ -1,0 +1,3 @@
+port: /dev/ttyS2
+baudrate: 115200
+

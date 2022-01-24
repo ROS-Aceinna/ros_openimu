@@ -18,7 +18,20 @@ except:  # pylint: disable=bare-except
 
 class OpenIMUros:
     def __init__(self):
-        self.openimudev = OpenIMU()
+
+        self.port = rospy.get_param('port', '/dev/ttyS2')
+        self.baudrate = rospy.get_param('baudrate', '115200')
+
+
+        self.openimudev = OpenIMU(
+		device_type='IMU',
+		com_port=self.port,
+		baudrate=self.baudrate
+	)
+
+        rospy.loginfo(self.port)
+        rospy.loginfo(self.baudrate)
+
         self.openimudev.startup()
 
     def close(self):
