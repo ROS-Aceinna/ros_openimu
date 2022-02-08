@@ -3,7 +3,7 @@
 import rospy
 import sys
 import math
-from time import time
+from time import time, sleep
 from sensor_msgs.msg import Imu, MagneticField
 
 try:
@@ -18,7 +18,20 @@ except:  # pylint: disable=bare-except
 
 class OpenIMUros:
     def __init__(self):
-        self.openimudev = OpenIMU()
+
+        self.port = rospy.get_param('port', '/dev/ttyS2')
+        self.baudrate = rospy.get_param('baudrate', '115200')
+
+
+        self.openimudev = OpenIMU(
+		device_type='IMU',
+		com_port=self.port,
+		baudrate=self.baudrate
+	)
+
+        rospy.loginfo(self.port)
+        rospy.loginfo(self.baudrate)
+
         self.openimudev.startup()
 
     def close(self):
@@ -43,7 +56,7 @@ if __name__ == "__main__":
     imu_msg = Imu()             # IMU data
     mag_msg = MagneticField()   # Magnetometer data
     
-    rate = rospy.Rate(10)   # 10Hz
+    rate = rospy.Rate(200)   # 200Hz
     seq = 0
     frame_id = 'OpenIMU'
     convert_rads = math.pi /180
@@ -51,6 +64,7 @@ if __name__ == "__main__":
 
     openimu_wrp = OpenIMUros()
     rospy.loginfo("OpenIMU driver initialized.")
+    sleep(5)
 
     while not rospy.is_shutdown():
         #read the data - call the get imu measurement data
