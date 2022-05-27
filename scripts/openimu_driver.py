@@ -43,7 +43,7 @@ if __name__ == "__main__":
     imu_msg = Imu()             # IMU data
     mag_msg = MagneticField()   # Magnetometer data
     
-    rate = rospy.Rate(10)   # 10Hz
+    rate = rospy.Rate(100)   # 100Hz       # increase for faster rate or comment out this and line 200 for max rate
     seq = 0
     frame_id = 'OpenIMU'
     convert_rads = math.pi /180
@@ -54,7 +54,7 @@ if __name__ == "__main__":
 
     while not rospy.is_shutdown():
         #read the data - call the get imu measurement data
-        packetType = 'z1'                       # z1, s1, a1, a2, e1, e2
+        packetType = 'a2'                       # z1, s1, a1, a2, e1, e2
         readback = openimu_wrp.readimu(packetType)
 
         if packetType == 'z1':
@@ -197,7 +197,7 @@ if __name__ == "__main__":
             print("unknown packet type")
 
         seq = seq + 1
-        rate.sleep()
+        rate.sleep()            
     openimu_wrp.close()         # exit
 
 
