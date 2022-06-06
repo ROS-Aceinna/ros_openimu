@@ -38,7 +38,7 @@ class OpenIMU(object):
 
     def getdata(self, datatype):
         readback = self.imudevice.read_untils_have_data(datatype,3,200)     #  can be used to adjust rate 3, 200 for max rate, 200, 20 default
-        if datatype == ('a2'):
+        if datatype == ('z1'):
             timeraw = (readback[0:4]) #time in ms
             time_ms = struct.unpack('I', bytes(timeraw))[0]
             xaccelraw = (readback[4:8]) #xaccel
